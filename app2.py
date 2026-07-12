@@ -3,23 +3,71 @@ from groq import Groq
 import yt_dlp
 import os
 
-# --- Configuração da Interface (Streamlit) ---
-st.set_page_config(page_title="Analisador de Copys TikTok", page_icon="📝", layout="centered")
+# --- 1. Configuração da Página e Tema Escuro Premium ---
+st.set_page_config(
+    page_title="HookLab // Analisador de Ganchos", 
+    page_icon="⚡", 
+    layout="centered"
+)
 
-st.title("📝 Analisador de Roteiros e Ganchos")
-st.markdown("Cole o link do TikTok para transcrever o áudio e extrair a estrutura de retenção perfeita.")
+# Injeção de CSS para customizar as cores, botões e fontes (Estilo SaaS Moderno)
+st.markdown("""
+    <style>
+    /* Alterar o fundo e a cor do texto global */
+    .stApp {
+        background-color: #0B0E14;
+        color: #E2E8F0;
+    }
+    /* Customização dos Inputs de Texto */
+    .stTextInput input {
+        background-color: #1A1F2C !important;
+        color: #FFFFFF !important;
+        border: 1px solid #2D3748 !important;
+        border-radius: 8px !important;
+    }
+    .stTextInput input:focus {
+        border-color: #7C3AED !important;
+        box-shadow: 0 0 0 1px #7C3AED !important;
+    }
+    /* Estilização do Botão Principal (Roxo Neon / Estilo TikTok) */
+    .stButton>button {
+        background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3) !important;
+    }
+    .stButton>button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+    }
+    /* Caixas de informação customizadas */
+    .stAlert {
+        background-color: #1A1F2C !important;
+        border: 1px solid #3B82F6 !important;
+        border-radius: 8px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# SISTEMA DE SEGURANÇA DE CHAVE
-# Se você colocar sua chave nos "Secrets" do Streamlit, o app usa ela direto. 
-# Se não colocar, ele pede para o usuário digitar uma chave na tela.
+# --- 2. Cabeçalho Principal ---
+st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-family: system-ui;'>⚡ Hook<span style='color: #7C3AED;'>Lab</span></h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Engenharia reversa e inteligência de copy para ganchos do TikTok.</p>", unsafe_allow_html=True)
+st.markdown("---")
+
+# --- 3. Área de Credenciais e Inputs ---
 if "GROQ_API_KEY" in st.secrets:
     api_key = st.secrets["GROQ_API_KEY"]
 else:
-    api_key = st.text_input("Cole sua API Key da Groq aqui (gsk_...):", type="password")
+    api_key = st.text_input("Chave de Acesso (Groq API Key):", type="password", placeholder="gsk_...")
 
-url_tiktok = st.text_input("Link do vídeo do TikTok:")
+url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-# --- O Prompt Especialista em TikTok ---
+# --- 4. O Prompt Especialista ---
 prompt_analise = """
 Você é um Engenheiro de Retenção e Copywriter sênior focado em crescimento no TikTok.
 Sua missão é pegar a transcrição do vídeo e transformá-la em um TEMPLATE DE ESTRUTURA VIRAL pronto para ser copiado e adaptado.
@@ -32,7 +80,7 @@ Gere o relatório formatado rigorosamente seguindo esta estrutura:
 * **Análise de Ritmo:** Por que esse texto forçou o usuário a parar o scroll?
 
 ## 📈 2. A CONSTRUÇÃO (Buildup)
-* **Estratégia de Retenção:** Como o criador segurou o interesse logo após o gancho? (Ele fez uma promessa? Gerou um mistério?).
+* **Estratégia de Retenção:** Como o criador segurou o interesse logo após o gancho?
 * **Sugestão de Quebra de Padrão:** Indique em qual segundo exato deste bloco você deve colocar um corte, zoom ou inserção de texto na tela para reter o público.
 
 ## 💎 3. A ENTREGA (Outcome)
@@ -41,7 +89,7 @@ Gere o relatório formatado rigorosamente seguindo esta estrutura:
 
 ## 📢 4. CHAMADA PARA AÇÃO (CTA)
 * **Comando Final:** Qual comando foi dado?
-* **Otimização de Algoritmo:** Sugira como reescrever essa CTA focando estritamente em **Salvar** ou **Compartilhar** (que são as métricas que mais distribuem vídeos hoje).
+* **Otimização de Algoritmo:** Sugira como reescrever essa CTA focando estritamente em Salvar ou Compartilhar (que são as métricas que mais distribuem vídeos hoje).
 
 ---
 
@@ -63,22 +111,23 @@ def baixar_video(url):
     except Exception as e:
         return None
 
-if st.button("Analisar Roteiro 🚀"):
+# --- 5. Execução do Aplicativo ---
+if st.button("Analisar Estrutura 🚀"):
     if not api_key:
-        st.warning("⚠️ Por favor, insira uma chave da Groq válida.")
+        st.warning("⚠️ Por favor, insira uma chave válida.")
     elif not url_tiktok:
-        st.warning("⚠️ Cole um link do TikTok para analisar.")
+        st.warning("⚠️ Cole um link do TikTok para começar.")
     else:
-        with st.spinner('Baixando o áudio do vídeo...'):
+        with st.spinner('Baixando áudio do TikTok...'):
             caminho_video = baixar_video(url_tiktok)
             
         if caminho_video is None:
-            st.error("❌ Erro ao acessar o vídeo. O link pode estar quebrado ou o TikTok bloqueou o acesso.")
+            st.error("❌ O link pode estar quebrado ou o TikTok bloqueou o acesso temporariamente.")
         else:
             try:
                 client = Groq(api_key=api_key)
                 
-                with st.spinner('Ouvindo e transcrevendo o vídeo...'):
+                with st.spinner('Processando áudio e gerando transcrição...'):
                     with open(caminho_video, "rb") as file:
                         transcricao = client.audio.transcriptions.create(
                             file=(caminho_video, file.read()),
@@ -87,23 +136,26 @@ if st.button("Analisar Roteiro 🚀"):
                             language="pt"
                         )
                 
-                st.subheader("🗣️ Texto Transcrito do Vídeo:")
-                st.info(transcricao)
-                
-                with st.spinner('Destrinchando a estrutura perfeita do TikTok...'):
+                with st.spinner('Decodificando os segredos do algoritmo...'):
                     chat_completion = client.chat.completions.create(
                         messages=[{"role": "user", "content": f"{prompt_analise}\n\nTexto:\n{transcricao}"}],
                         model="llama-3.3-70b-versatile",
                     )
                     resposta = chat_completion.choices[0].message.content
                 
-                st.success("Análise de Estrutura Concluída!")
-                st.markdown("---")
-                st.markdown(resposta)
+                # --- O Toque de Mestre: Organização em Abas ---
+                st.markdown("### 📊 Resultados Encontrados")
+                aba_analise, aba_texto = st.tabs(["✨ Estrutura da Copy", "🗣️ Transcrição Completa"])
+                
+                with aba_analise:
+                    st.markdown(resposta)
+                    
+                with aba_texto:
+                    st.info(transcricao)
                 
                 os.remove(caminho_video)
                 
             except Exception as e:
-                st.error(f"❌ Erro na análise: {e}")
+                st.error(f"❌ Erro interno: {e}")
                 if os.path.exists(caminho_video):
                     os.remove(caminho_video)
