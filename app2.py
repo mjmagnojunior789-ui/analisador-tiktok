@@ -40,7 +40,6 @@ st.markdown("""
     }
     .stButton>button:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
     }
     .stAlert {
         background-color: #1A1F2C !important;
@@ -52,7 +51,7 @@ st.markdown("""
 
 # --- 2. Cabeçalho Principal ---
 st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-family: system-ui;'>⚡ Hook<span style='color: #7C3AED;'>Lab</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Engenharia reversa e inteligência de copy para ganchos do TikTok.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Mapeamento Estrutural Rígido // Otimizado para o Algoritmo Atual.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # --- 3. Área de Credenciais e Inputs ---
@@ -63,32 +62,29 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-# NOVO RECURSO: Segunda caixa para especificar o jogo
-nome_jogo = st.text_input("Para qual JOGO você quer aplicar essa estrutura? (Opcional):", placeholder="Ex: Minecraft, GTA V, Valorant, Free Fire...")
+nome_jogo = st.text_input("Para qual JOGO você quer clonar essa estrutura?", placeholder="Ex: Minecraft, Valorant, GTA V...")
 
-# --- 4. O Prompt Especialista Adaptável ---
+# --- 4. O NOVO PROMPT BRUTO E RÍGIDO (Foco Algoritmo 2026) ---
 prompt_analise = """
-Você é um Engenheiro de Retenção e Copywriter sênior focado em crescimento no TikTok e no nicho de Gaming.
-Sua missão é pegar a transcrição do vídeo e transformá-la em um TEMPLATE DE ESTRUTURA VIRAL pronto para ser copiado e adaptado.
+Você é um Diretor de Retenção Algorítmica e Analista de Dados sênior especializado no ecossistema do TikTok.
+Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios ou textos subjetivos. Foque na mecânica fria que dita o gráfico de retenção e as métricas atuais que valorizam tempo de tela e compartilhamento.
 
-Gere o relatório formatado rigorosamente seguindo esta estrutura:
+Desmonte a transcrição fornecida exatamente sob esta estrutura rígida:
 
-## 🪝 1. O GANCHO CAMPEÃO (0 a 3 segundos)
-* **Texto Exato Usado:** "[Cole aqui a frase exata do criador]"
-* **Gatilho Mental Dominante:** (Ex: curiosidade, dor urgente, quebra de padrão)
-* **Análise de Ritmo:** Por que esse texto forçou o usuário a parar o scroll?
+## 🧮 1. A EQUAÇÃO DO GANCHO (0 a 3s)
+* **Texto Bruto Usado:** "[Frase exata dita]"
+* **Mecânica do Scroll-Stopper:** Qual foi o gatilho exato (Quebra de expectativa, Alerta de dopamina, Inveja ou Medo)? Por que o cérebro do usuário travou o dedo ao ler isso?
+* **Densidade de Palavras:** O ritmo foi acelerado ou teve pausas calculadas?
 
-## 📈 2. A CONSTRUÇÃO (Buildup)
-* **Estratégia de Retenção:** Como o criador segurou o interesse logo após o gancho?
-* **Sugestão de Quebra de Padrão:** Indique em qual segundo exato deste bloco você deve colocar um corte, zoom ou inserção de texto na tela para reter o público.
+## 📐 2. O ESQUELETO DA COPY (Blueprint Abstrato)
+Transforme o roteiro do vídeo inteiro em uma fórmula reutilizável substituindo os elementos específicos por tags genéricas entre colchetes. 
+*Exemplo de formato esperado:* `[GANCHO: Afirmação Chocante] + [PROVOCAÇÃO: Você está fazendo errado] + [PROVA: Olha o que acontece] + [ENTREGA: Passo 1, Passo 2] + [CTA de Loop]`.
+Crie a linha de montagem exata deste vídeo para que eu possa apenas preencher os espaços em branco.
 
-## 💎 3. A ENTREGA (Outcome)
-* **Resumo da Entrega:** Como o vídeo entregou o valor prometido de forma rápida e sem enrolação? 
-* **Fórmula do Conteúdo:** Extraia a lógica por trás da explicação (Ex: Problema -> Solução Direta, Antes -> Depois).
-
-## 📢 4. CHAMADA PARA AÇÃO (CTA)
-* **Comando Final:** Qual comando foi dado?
-* **Otimização de Algoritmo:** Sugira como reescrever essa CTA focando estritamente em Salvar ou Compartilhar (que são as métricas que mais distribuem vídeos hoje).
+## 📉 3. PONTOS CRÍTICOS DE RETENÇÃO (Métricas Atuais)
+* **Retenção de Meio:** Como o roteiro evitou a queda livre no gráfico após os 5 segundos? 
+* **Gatilho de SEO de Busca:** Quais palavras-chave fortes de nicho foram repetidas estrategicamente no texto para forçar o TikTok a indexar esse vídeo na barra de pesquisa?
+* **O Mecanismo de Loop / Compartilhamento:** Como o final foi amarrado para fazer o usuário reassistir (Loop limpo) ou salvar o vídeo imediatamente?
 
 ---
 
@@ -109,22 +105,22 @@ def baixar_video(url):
         return None
 
 # --- 5. Execução do Aplicativo ---
-if st.button("Analisar Estrutura 🚀"):
+if st.button("Destrinchar Estrutura Algorítmica 🚀"):
     if not api_key:
         st.warning("⚠️ Por favor, insira uma chave válida.")
     elif not url_tiktok:
         st.warning("⚠️ Cole um link do TikTok para começar.")
     else:
-        with st.spinner('Baixando áudio do TikTok...'):
+        with st.spinner('Extraindo dados do TikTok...'):
             caminho_video = baixar_video(url_tiktok)
             
         if caminho_video is None:
-            st.error("❌ O link pode estar quebrado ou o TikTok bloqueou o acesso temporariamente.")
+            st.error("❌ O link falhou ou o TikTok barrou a requisição.")
         else:
             try:
                 client = Groq(api_key=api_key)
                 
-                with st.spinner('Processando áudio e gerando transcrição...'):
+                with st.spinner('Decodificando áudio...'):
                     with open(caminho_video, "rb") as file:
                         transcricao = client.audio.transcriptions.create(
                             file=(caminho_video, file.read()),
@@ -133,30 +129,35 @@ if st.button("Analisar Estrutura 🚀"):
                             language="pt"
                         )
                 
-                with st.spinner('Decodificando a estrutura e criando as variações...'):
-                    # Ajusta dinamicamente a parte final do prompt baseado no jogo digitado
+                with st.spinner('Quebrando roteiro na fórmula analítica...'):
+                    # Customização cirúrgica para o jogo alvo do usuário
                     if nome_jogo:
                         instrucao_jogo = f"""
-## 🛠️ SUAS 3 VARIAÇÕES ADAPTADAS PARA O JOGO: {nome_jogo.upper()}
-Crie 3 roteiros curtos (Ganchos + Construção) idênticos à estrutura desse vídeo, mas aplicados inteiramente ao contexto, dores, memes ou curiosidades do jogo **{nome_jogo}** para que o usuário possa apenas gravar.
+## 🛠️ CLONES ROTEIRIZADOS PARA O JOGO: {nome_jogo.upper()}
+Crie 3 scripts secos e prontos para gravar aplicados estritamente ao universo, mecânicas, metas ou frustrações do jogo **{nome_jogo}**. 
+Use EXATAMENTE o mesmo esqueleto estrutural (Blueprint) extraído do vídeo de exemplo. Sem enrolação, direto ao ponto:
+* **Script 1 (Foco em Curiosidade/Descoberta)**
+* **Script 2 (Foco em Dor/Erro Comum do Jogador)**
+* **Script 3 (Foco em Desafio/Recompensa Rápida)**
 """
                     else:
                         instrucao_jogo = """
-## 🛠️ SUAS 3 VARIAÇÕES PRONTAS PARA USAR
-Crie 3 roteiros curtos (Ganchos + Construção) idênticos à estrutura desse vídeo, prontos para o usuário preencher, aplicados a 3 nichos genéricos diferentes e lucrativos.
+## 🛠️ 3 CLONES ESTRUTURAIS PRONTOS
+Crie 3 variações de scripts curtos clonando a exata estrutura mecânica do exemplo, usando placeholders como [Tema], [Problema] e [Solução] para que eu possa preencher com o nicho que eu quiser.
 """
                     
                     prompt_final = prompt_analise + instrucao_jogo
                     
                     chat_completion = client.chat.completions.create(
-                        messages=[{"role": "user", "content": f"{prompt_final}\n\nTexto transcrito do vídeo:\n{transcricao}"}],
+                        messages=[{"role": "user", "content": f"{prompt_final}\n\nTranscrição para processamento:\n{transcricao}"}],
                         model="llama-3.3-70b-versatile",
+                        temperature=0.2, # Deixa o modelo muito mais preciso, lógico e menos "criativo/poético"
                     )
                     resposta = chat_completion.choices[0].message.content
                 
                 # --- Organização em Abas ---
-                st.markdown("### 📊 Resultados Encontrados")
-                aba_analise, aba_texto = st.tabs(["✨ Estrutura da Copy", "🗣️ Transcrição Completa"])
+                st.markdown("### 📊 Engenharia Reversa")
+                aba_analise, aba_texto = st.tabs(["⚡ Fórmula Rígida", "🗣️ Texto de Origem"])
                 
                 with aba_analise:
                     st.markdown(resposta)
@@ -167,6 +168,6 @@ Crie 3 roteiros curtos (Ganchos + Construção) idênticos à estrutura desse v�
                 os.remove(caminho_video)
                 
             except Exception as e:
-                st.error(f"❌ Erro interno: {e}")
+                st.error(f"❌ Falha no processamento: {e}")
                 if os.path.exists(caminho_video):
                     os.remove(caminho_video)
