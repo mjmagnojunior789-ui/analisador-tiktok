@@ -10,15 +10,13 @@ st.set_page_config(
     layout="centered"
 )
 
-# Injeção de CSS para customizar as cores, botões e fontes (Estilo SaaS Moderno)
+# Injeção de CSS para customizar as cores, botões e fontes
 st.markdown("""
     <style>
-    /* Alterar o fundo e a cor do texto global */
     .stApp {
         background-color: #0B0E14;
         color: #E2E8F0;
     }
-    /* Customização dos Inputs de Texto */
     .stTextInput input {
         background-color: #1A1F2C !important;
         color: #FFFFFF !important;
@@ -29,7 +27,6 @@ st.markdown("""
         border-color: #7C3AED !important;
         box-shadow: 0 0 0 1px #7C3AED !important;
     }
-    /* Estilização do Botão Principal (Roxo Neon / Estilo TikTok) */
     .stButton>button {
         background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%) !important;
         color: white !important;
@@ -45,7 +42,6 @@ st.markdown("""
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
     }
-    /* Caixas de informação customizadas */
     .stAlert {
         background-color: #1A1F2C !important;
         border: 1px solid #3B82F6 !important;
@@ -67,9 +63,12 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-# --- 4. O Prompt Especialista ---
+# NOVO RECURSO: Segunda caixa para especificar o jogo
+nome_jogo = st.text_input("Para qual JOGO você quer aplicar essa estrutura? (Opcional):", placeholder="Ex: Minecraft, GTA V, Valorant, Free Fire...")
+
+# --- 4. O Prompt Especialista Adaptável ---
 prompt_analise = """
-Você é um Engenheiro de Retenção e Copywriter sênior focado em crescimento no TikTok.
+Você é um Engenheiro de Retenção e Copywriter sênior focado em crescimento no TikTok e no nicho de Gaming.
 Sua missão é pegar a transcrição do vídeo e transformá-la em um TEMPLATE DE ESTRUTURA VIRAL pronto para ser copiado e adaptado.
 
 Gere o relatório formatado rigorosamente seguindo esta estrutura:
@@ -93,8 +92,6 @@ Gere o relatório formatado rigorosamente seguindo esta estrutura:
 
 ---
 
-## 🛠️ SUAS 3 VARIAÇÕES PRONTAS PARA USAR
-Crie 3 roteiros curtos (Ganchos + Construção) idênticos à estrutura desse vídeo, prontos para o usuário preencher, aplicados a 3 nichos diferentes e lucrativos.
 """
 
 def baixar_video(url):
@@ -136,14 +133,28 @@ if st.button("Analisar Estrutura 🚀"):
                             language="pt"
                         )
                 
-                with st.spinner('Decodificando os segredos do algoritmo...'):
+                with st.spinner('Decodificando a estrutura e criando as variações...'):
+                    # Ajusta dinamicamente a parte final do prompt baseado no jogo digitado
+                    if nome_jogo:
+                        instrucao_jogo = f"""
+## 🛠️ SUAS 3 VARIAÇÕES ADAPTADAS PARA O JOGO: {nome_jogo.upper()}
+Crie 3 roteiros curtos (Ganchos + Construção) idênticos à estrutura desse vídeo, mas aplicados inteiramente ao contexto, dores, memes ou curiosidades do jogo **{nome_jogo}** para que o usuário possa apenas gravar.
+"""
+                    else:
+                        instrucao_jogo = """
+## 🛠️ SUAS 3 VARIAÇÕES PRONTAS PARA USAR
+Crie 3 roteiros curtos (Ganchos + Construção) idênticos à estrutura desse vídeo, prontos para o usuário preencher, aplicados a 3 nichos genéricos diferentes e lucrativos.
+"""
+                    
+                    prompt_final = prompt_analise + instrucao_jogo
+                    
                     chat_completion = client.chat.completions.create(
-                        messages=[{"role": "user", "content": f"{prompt_analise}\n\nTexto:\n{transcricao}"}],
+                        messages=[{"role": "user", "content": f"{prompt_final}\n\nTexto transcrito do vídeo:\n{transcricao}"}],
                         model="llama-3.3-70b-versatile",
                     )
                     resposta = chat_completion.choices[0].message.content
                 
-                # --- O Toque de Mestre: Organização em Abas ---
+                # --- Organização em Abas ---
                 st.markdown("### 📊 Resultados Encontrados")
                 aba_analise, aba_texto = st.tabs(["✨ Estrutura da Copy", "🗣️ Transcrição Completa"])
                 
