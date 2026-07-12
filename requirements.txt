@@ -1,3 +1,4 @@
 streamlit
 groq
 yt-dlp
+duckduckgo_search
