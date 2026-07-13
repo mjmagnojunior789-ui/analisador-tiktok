@@ -13,7 +13,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Injeção de CSS para customizar as cores, botões e fontes (Estilo SaaS Premium)
+# Injeção de CSS para customizar as cores, botões e fontes
 st.markdown("""
     <style>
     .stApp {
@@ -65,7 +65,6 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo de exemplo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-# BLOCO NOVO: Coleta de Dados do Criador e do Jogo
 col1, col2 = st.columns(2)
 with col1:
     arroba_criador = st.text_input("Criador (@arroba ou Nome do Perfil):", placeholder="Ex: @alanzoka, @tavares")
@@ -224,7 +223,7 @@ if st.button("Executar Engenharia Reversa & Auditoria 🚀"):
                             pass
 
                 with st.spinner('Processando matriz de roteirização avançada...'):
-                    # Constrói o bloco de instruções finais customizadas e variadas
+                    # VARIÁVEL CORRIGIDA (SEM ACENTOS)
                     instrucao_final = f"""
 ## 🎯 6. MATRIZ DE ROTEIRIZAÇÃO VARIADA (Fórmula Clonal Adaptada)
 **Dados de Contexto do Criador:**
@@ -235,12 +234,12 @@ if st.button("Executar Engenharia Reversa & Auditoria 🚀"):
 
 Aplique o esqueleto estrutural (Blueprint) extraído do vídeo e crie **3 opções de roteiros inteiramente variadas**, com abordagens e linhas editoriais completamente diferentes, aplicando gírias, armas, táticas e patches reais do jogo **{nome_final_jogo}**.
 
-**REGRAS DE GERAÇÃO DOS CÁNAIS DE ELITE:**
+**REGRAS DE GERAÇÃO DOS CANAIS DE ELITE:**
 * Proibido o uso de termos genéricos entre colchetes. Os textos devem vir prontos para ler.
 * Use termos limpos (Dicionário de Camuflagem) em todos os scripts.
 * Insira indicações de cortes visuais dinâmicos entre parênteses `(ex: Corte seco para o mapa, Zoom rápido)`.
 
-Gere as 3 opções sob esta divisão rígida de Linha Editorial:
+Gere os 3 scripts seguindo estritamente esta estrutura:
 
 ### 📈 Opção 1: Linha de Retenção Cinestésica (Foco em Entretenimento Rápido / Viralização de Massa)
 * *Estratégia do Gancho:* Quebra de padrão visual e áudio acelerado.
@@ -258,7 +257,7 @@ Gere as 3 opções sob esta divisão rígida de Linha Editorial:
 "..."
 """
                     
-                    prompt_final = prompt_analise + instrução_final
+                    prompt_final = prompt_analise + instrucao_final
                     
                     chat_completion = client.chat.completions.create(
                         messages=[{"role": "user", "content": f"{prompt_final}\n\nTranscrição base para engenharia reversa:\n{transcricao}"}],
