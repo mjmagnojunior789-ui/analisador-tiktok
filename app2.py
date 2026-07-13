@@ -8,12 +8,12 @@ from duckduckgo_search import DDGS
 
 # --- 1. Configuração da Página e Tema Escuro Premium ---
 st.set_page_config(
-    page_title="HookLab // Analisador de Ganchos", 
+    page_title="HookLab // Analisador de Ganchos & Perfis", 
     page_icon="⚡", 
     layout="centered"
 )
 
-# Injeção de CSS para customizar as cores, botões e fontes
+# Injeção de CSS para customizar as cores, botões e fontes (Estilo SaaS Premium)
 st.markdown("""
     <style>
     .stApp {
@@ -53,8 +53,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- 2. Cabeçalho Principal ---
-st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-family: system-ui;'>⚡ Hook<span style='color: #7C3AED;'>Lab</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Mapeamento Rígido // Engine de Dados e Diretrizes de Moderação Contra Shadowban.</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-family: system-ui;'>⚡ Hook<span style='color: #7C3AED;'>Lab</span> PRO</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Auditoria de Perfil, Inteligência de Meta e Engenharia de Retenção.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # --- 3. Área de Credenciais e Inputs ---
@@ -63,36 +63,46 @@ if "GROQ_API_KEY" in st.secrets:
 else:
     api_key = st.text_input("Chave de Acesso (Groq API Key):", type="password", placeholder="gsk_...")
 
-url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
+url_tiktok = st.text_input("Link do vídeo de exemplo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-nome_jogo = st.text_input("Para qual JOGO ou LINK DA STEAM você quer clonar essa estrutura?", placeholder="Ex: Valorant, Elden Ring, Minecraft, Fortnite...")
+# BLOCO NOVO: Coleta de Dados do Criador e do Jogo
+col1, col2 = st.columns(2)
+with col1:
+    arroba_criador = st.text_input("Criador (@arroba ou Nome do Perfil):", placeholder="Ex: @alanzoka, @tavares")
+with col2:
+    nome_jogo = st.text_input("Jogo alvo ou Link da Steam:", placeholder="Ex: Valorant, Elden Ring...")
 
-# --- 4. O PROMPT BRUTO E RÍGIDO (Foco Algoritmo + Segurança de Conteúdo) ---
+# --- 4. O PROMPT DE AUDITORIA ULTRA-RÍGIDO (Foco Algoritmo Avançado) ---
 prompt_analise = """
-Você é um Diretor de Retenção Algorítmica, Analista de Dados e Especialista em Diretrizes de Comunidade do TikTok.
-Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios ou textos subjetivos. Foque na mecânica fria que dita o gráfico de retenção, SEO e, principalmente, nas regras estritas de moderação automatizada de áudio para evitar suspensão de vídeo, perda de monetização ou Shadowban (não entrega do conteúdo).
+Você é um Diretor de Retenção Algorítmica, Analista de Dados e Engenheiro de Marcas focado no ecossistema do TikTok.
+Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios. Foque na mecânica fria que dita o gráfico de retenção, retenção estável de primeiro quadrante e conversão de visualizações em seguidores fiéis.
 
-Desmonte a transcrição fornecida exatamente sob esta estrutura rígida:
+Desmonte os dados fornecidos exatamente sob esta estrutura rígida:
 
 ## 🧮 1. A EQUAÇÃO DO GANCHO (0 a 3s)
-* **Texto Bruto Usado:** "[Frase exata dita]"
+* **Texto Bruto Usado no Vídeo:** "[Frase exata dita]"
 * **Mecânica do Scroll-Stopper:** Qual foi o gatilho exato (Quebra de expectativa, Alerta de dopamina, Inveja ou Medo)? Por que o cérebro do usuário travou o dedo ao ler isso?
 * **Densidade de Palavras:** O ritmo foi acelerado ou teve pausas calculadas?
 
 ## 📐 2. O ESQUELETO DA COPY (Blueprint Abstrato)
 Transforme o roteiro do vídeo inteiro em uma fórmula reutilizável substituindo os elementos específicos por tags genéricas entre colchetes. 
-*Exemplo de formato esperado:* `[GANCHO: Afirmação Chocante] + [PROVOCAÇÃO: Você está fazendo errado] + [PROVA: Olha o que acontece] + [ENTREGA: Passo 1, Passo 2] + [CTA de Loop]`.
+*Exemplo de formato esperado:* `[GANCHO: Afirmação Chocante] + [PROVOCAÇÃO: Você está fazendo errado] + [PROVA: Olha o que acontece] + [ENTREGA: Passo 1] + [CTA de Loop]`.
 Crie a linha de montagem exata deste vídeo para que eu possa apenas preencher os espaços em branco.
 
-## 📉 3. PONTOS CRÍTICOS DE RETENÇÃO (Métricas Atuais)
+## 📉 3. PONTOS CRÍTICOS DE RETENÇÃO & SEO
 * **Retenção de Meio:** Como o roteiro evitou a queda livre no gráfico após os 5 segundos? 
 * **Gatilho de SEO de Busca:** Quais palavras-chave fortes de nicho foram repetidas estrategicamente no texto para forçar o TikTok a indexar esse vídeo na barra de pesquisa?
 * **O Mecanismo de Loop / Compartilhamento:** Como o final foi amarrado para fazer o usuário reassistir (Loop limpo) ou salvar o vídeo imediatamente?
 
-## 🚨 4. FILTRO DE SEGURANÇA E DIRETRIZES DE MODERAÇÃO DO TIKTOK
-* **Palavras de Risco Identificadas:** Analise o texto original e liste quais termos ou expressões faladas correm o risco de disparar o filtro automático de moderação do TikTok (ex: termos violentos de jogos como "matar", "morrer", "sangue", "arma", ou jargões técnicos interpretados como nocivos como "hack", "cheat", "roubado", "dinheiro fácil", "bugar").
-* **Assuntos com Alto Risco de Suspensão:** Explique qual tipo de conteúdo ou abordagem dentro desse jogo/nicho faz a plataforma limitar o alcance ou suspender a conta (ex: ensinar glitches vantajosos em jogos online, toxicidade velada, incitação a trapaças, conteúdo que promova comportamento perigoso para menores).
-* **Dicionário de Camuflagem (O que e como falar):** Crie uma tabela de substituição de termos rápida indicando quais palavras fortes do nicho devem ser evitadas e qual termo seguro usar no lugar (ex: trocar "matar" por "eliminar/deitar", trocar "hack" por "vantagem/tática", trocar "bug" por "mecânica oculta").
+## 🚨 4. FILTRO DE SEGURANÇA E DIRETRIZES DE MODERAÇÃO
+* **Palavras de Risco Identificadas:** Quais termos na transcrição correm o risco de disparar o filtro de moderação do áudio automatizado do TikTok (ex: matar, roubado, hack, bug).
+* **Dicionário de Camuflagem:** Crie uma tabela rápida substituindo os termos perigosos identificados por palavras limpas e seguras para o algoritmo (ex: trocar "matar" por "eliminar").
+
+## 👤 5. AUDITORIA DE PERFIL & DIAGNÓSTICO DE AUTORIDADE
+Baseando-se nos dados históricos do criador fornecidos:
+* **Arquétipo Atual do Perfil:** Classifique a presença digital desse criador (Ex: O Especialista Técnico, O Pro-Player Tóxico/Irônico, O Contador de Histórias, O Caçador de Curiosidades).
+* **O que PODE Melhorar:** Aponte de forma rígida quais falhas estruturais de roteiro ou posicionamento esse criador costuma cometer que fazem o gráfico de retenção cair (ex: introduções demoradas, falta de call-to-action focada em salvamentos, falta de palavras-chave para SEO de busca).
+* **Blindagem de Retenção:** Indique a estratégia exata que perfis de mais de 1 milhão de seguidores usam para manter a base engajada neste exato nicho.
 
 ---
 
@@ -149,7 +159,7 @@ def baixar_video(url):
         return None
 
 # --- 5. Execução do Aplicativo ---
-if st.button("Destrinchar Estrutura Algorítmica 🚀"):
+if st.button("Executar Engenharia Reversa & Auditoria 🚀"):
     if not api_key:
         st.warning("⚠️ Por favor, insira uma chave válida.")
     elif not url_tiktok:
@@ -164,7 +174,7 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
             try:
                 client = Groq(api_key=api_key)
                 
-                with st.spinner('Decodificando áudio...'):
+                with st.spinner('Decodificando áudio de amostra...'):
                     with open(caminho_video, "rb") as file:
                         transcricao = client.audio.transcriptions.create(
                             file=(caminho_video, file.read()),
@@ -173,77 +183,93 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                             language="pt"
                         )
                 
-                # --- Coleta Híbrida de Informações do Jogo ---
+                # --- BIG DATA GAMING & CREATOR SCRAPING ---
                 contexto_gaming = ""
-                nome_final_jogo = nome_jogo
+                contexto_perfil = ""
+                nome_final_jogo = nome_jogo if nome_jogo else "Jogo Genérico"
                 
+                # Rastreamento de dados do Criador
+                if arroba_criador:
+                    with st.spinner(f'Escaneando pegada digital de {arroba_criador} no ecossistema TikTok...'):
+                        try:
+                            with DDGS() as ddgs:
+                                query_perfil = f"{arroba_criador} site:tiktok.com estilo de video conteudo posts views"
+                                try:
+                                    busca_perfil = list(ddgs.text(keywords=query_perfil, max_results=3))
+                                except TypeError:
+                                    busca_perfil = list(ddgs.text(query_perfil, max_results=3))
+                                    
+                                for res in busca_perfil:
+                                    contexto_perfil += f"- [HISTÓRICO DO CRIADOR] {res['body']}\n"
+                        except Exception:
+                            pass
+                
+                # Rastreamento de dados do Jogo
                 if nome_jogo:
-                    with st.spinner(f'Decodificando dados e plataformas...'):
+                    with st.spinner(f'Mapeando telemetria e metas de {nome_jogo}...'):
                         nome_final_jogo, dados_steam = buscar_dados_oficiais_steam(nome_jogo)
                         contexto_gaming += dados_steam
                         
                         try:
                             with DDGS() as ddgs:
-                                query_plataformas = f"{nome_final_jogo} (site:playvalorant.com OR site:ubisoft.com OR site:epicgames.com OR site:leagueoflegends.com OR site:fortnite.com) patch notes atualizacao meta balanceamento"
+                                query_plataformas = f"{nome_final_jogo} (site:playvalorant.com OR site:ubisoft.com OR site:epicgames.com OR site:leagueoflegends.com OR site:fortnite.com) patch notes atualizacao"
                                 try:
                                     busca_portais = list(ddgs.text(keywords=query_plataformas, max_results=3))
                                 except TypeError:
                                     busca_portais = list(ddgs.text(query_plataformas, max_results=3))
                                     
                                 for res in busca_portais:
-                                    contexto_gaming += f"- [LAUNCHER PORTAL DATA] {res['body']}\n"
+                                    contexto_gaming += f"- [LAUNCHER DATA] {res['body']}\n"
                         except Exception:
                             pass
 
-                with st.spinner('Montando roteiros com telemetria gamer e filtro anti-ban...'):
-                    if nome_jogo:
-                        instrucao_jogo = f"""
-## 🛠️ CLONES ROTEIRIZADOS ULTRA-ESPECÍFICOS: {nome_final_jogo.upper()}
-**Dados adicionais encontrados para contextualização:**
-{contexto_gaming if contexto_gaming else "(Nenhum dado externo encontrado. Recorra estritamente ao seu conhecimento integrado.)"}
+                with st.spinner('Processando matriz de roteirização avançada...'):
+                    # Constrói o bloco de instruções finais customizadas e variadas
+                    instrucao_final = f"""
+## 🎯 6. MATRIZ DE ROTEIRIZAÇÃO VARIADA (Fórmula Clonal Adaptada)
+**Dados de Contexto do Criador:**
+{contexto_perfil if contexto_perfil else "(Nenhum histórico do criador encontrado. Use o tom de voz inferido da transcrição original.)"}
 
-Sua missão agora é aplicar o esqueleto (Blueprint) extraído do vídeo de exemplo e gerar 3 scripts prontos para gravar adaptados inteiramente ao jogo **{nome_final_jogo}**.
+**Dados de Contexto do Jogo Alvo ({nome_final_jogo.upper()}):**
+{contexto_gaming if contexto_gaming else "(Use a base integrada de dados do jogo.)"}
 
-**REGRAS RÍGIDAS DE CLONAGEM (SEGURANÇA EXTREMA DE CONTEÚDO):**
-1. É PROIBIDO o uso de placeholders vazios. Os scripts devem vir com os nomes reais de armas, mapas, personagens ou táticas do jogo {nome_final_jogo}.
-2. REGRA DE COMPATIBILIDADE DE AUDIO: Os roteiros finais gerados NÃO PODEM conter palavras sensíveis identificadas na seção 4. Aplique o Dicionário de Camuflagem diretamente no texto falado. Em vez de usar palavras como "matar", "roubado" ou "hack", use substitutos limpos aprovados ("limpar a área", "imbatível", "estratégia avançada"). O texto gravado precisa passar liso pela moderação automática de áudio do TikTok.
-3. SE o bloco de dados adicionais acima estiver vazio, RECORRA 100% À SUA VASTA BASE DE CONHECIMENTO INTERNA sobre o jogo {nome_final_jogo}.
+Aplique o esqueleto estrutural (Blueprint) extraído do vídeo e crie **3 opções de roteiros inteiramente variadas**, com abordagens e linhas editoriais completamente diferentes, aplicando gírias, armas, táticas e patches reais do jogo **{nome_final_jogo}**.
 
-Gere os 3 scripts seguindo estritamente esta estrutura:
+**REGRAS DE GERAÇÃO DOS CÁNAIS DE ELITE:**
+* Proibido o uso de termos genéricos entre colchetes. Os textos devem vir prontos para ler.
+* Use termos limpos (Dicionário de Camuflagem) em todos os scripts.
+* Insira indicações de cortes visuais dinâmicos entre parênteses `(ex: Corte seco para o mapa, Zoom rápido)`.
 
-### 🎮 Script 1 (Foco em Curiosidade / Meta Atual do Jogo)
-* **Elementos Reais Injetados:** [Quais dados oficiais seguros foram aplicados]
-* **Roteiro Pronto (Seguro para Algoritmo):** 
+Gere as 3 opções sob esta divisão rígida de Linha Editorial:
+
+### 📈 Opção 1: Linha de Retenção Cinestésica (Foco em Entretenimento Rápido / Viralização de Massa)
+* *Estratégia do Gancho:* Quebra de padrão visual e áudio acelerado.
+* *Roteiro Pronto para Gravar:*
 "..."
 
-### 🎮 Script 2 (Foco em Dor / Erro Crítico que faz a comunidade perder)
-* **Elementos Reais Injetados:** [Quais frustrações reais de jogabilidade limpa foram aplicadas]
-* **Roteiro Pronto (Seguro para Algoritmo):** 
+### 💎 Opção 2: Linha de Autoridade Inabalável (Foco em Alto Valor / Salvamentos e SEO de Busca)
+* *Estratégia do Gancho:* Dor urgente e promessa clara baseada em dados reais do meta do jogo.
+* *Roteiro Pronto para Gravar:*
 "..."
 
-### 🎮 Script 3 (Foco em Tática Secreta / Recompensa Rápida / Build)
-* **Elementos Reais Injetados:** [Qual combinação de mecânicas legítimas do meta foi usada]
-* **Roteiro Pronto (Seguro para Algoritmo):** 
+### 📣 Opção 3: Linha de Engajamento Polarizado (Foco em Compartilhamento, Loops e Discussão nos Comentários)
+* *Estratégia do Gancho:* Opinião forte ("Hot-Take") ou comparação polêmica sobre elementos do jogo.
+* *Roteiro Pronto para Gravar:*
 "..."
-"""
-                    else:
-                        instrucao_jogo = """
-## 🛠️ 3 CLONES ESTRUTURAIS PRONTOS
-Crie 3 variações de scripts curtos clonando a exata estrutura mecânica do exemplo, usando placeholders como [Tema], [Problema] e [Solução] para que eu possa preencher com o nicho que eu quiser.
 """
                     
-                    prompt_final = prompt_analise + instrucao_jogo
+                    prompt_final = prompt_analise + instrução_final
                     
                     chat_completion = client.chat.completions.create(
-                        messages=[{"role": "user", "content": f"{prompt_final}\n\nTranscrição para processamento:\n{transcricao}"}],
+                        messages=[{"role": "user", "content": f"{prompt_final}\n\nTranscrição base para engenharia reversa:\n{transcricao}"}],
                         model="llama-3.3-70b-versatile",
                         temperature=0.2, 
                     )
                     resposta = chat_completion.choices[0].message.content
                 
                 # --- Organização em Abas ---
-                st.markdown("### 📊 Engenharia Reversa")
-                aba_analise, aba_texto = st.tabs(["⚡ Fórmula Rígida e Segurança", "🗣️ Texto de Origem"])
+                st.markdown("### 📊 Inteligência de Conteúdo")
+                aba_analise, aba_texto = st.tabs(["⚡ Auditoria & Matriz Pronta", "🗣️ Transcrição Base"])
                 
                 with aba_analise:
                     st.markdown(resposta)
