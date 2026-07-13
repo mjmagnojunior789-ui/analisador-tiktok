@@ -3,7 +3,7 @@ from groq import Groq
 import yt_dlp
 import os
 import requests
-import re  # Biblioteca para detectar o padrão do link da Steam
+import re
 from duckduckgo_search import DDGS
 
 # --- 1. Configuração da Página e Tema Escuro Premium ---
@@ -54,7 +54,7 @@ st.markdown("""
 
 # --- 2. Cabeçalho Principal ---
 st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-family: system-ui;'>⚡ Hook<span style='color: #7C3AED;'>Lab</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Mapeamento Estrutural Rígido // Engine de Dados Multi-Plataforma.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Mapeamento Rígido // Engine de Dados e Diretrizes de Moderação Contra Shadowban.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # --- 3. Área de Credenciais e Inputs ---
@@ -65,13 +65,12 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-# Input Atualizado para aceitar Nome ou Link da Steam
-nome_jogo = st.text_input("Para qual JOGO ou LINK DA STEAM você quer clonar essa estrutura?", placeholder="Ex: Elden Ring OU https://store.steampowered.com/app/1245620/...")
+nome_jogo = st.text_input("Para qual JOGO ou LINK DA STEAM você quer clonar essa estrutura?", placeholder="Ex: Valorant, Elden Ring, Minecraft, Fortnite...")
 
-# --- 4. PROMPT BRUTO E RÍGIDO (Foco Algoritmo) ---
+# --- 4. O PROMPT BRUTO E RÍGIDO (Foco Algoritmo + Segurança de Conteúdo) ---
 prompt_analise = """
-Você é um Diretor de Retenção Algorítmica e Analista de Dados sênior especializado no ecossistema do TikTok e nicho de Gaming.
-Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios ou textos subjetivos. Foque na mecânica fria que dita o gráfico de retenção e as métricas atuais que valorizam tempo de tela e compartilhamento.
+Você é um Diretor de Retenção Algorítmica, Analista de Dados e Especialista em Diretrizes de Comunidade do TikTok.
+Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios ou textos subjetivos. Foque na mecânica fria que dita o gráfico de retenção, SEO e, principalmente, nas regras estritas de moderação automatizada de áudio para evitar suspensão de vídeo, perda de monetização ou Shadowban (não entrega do conteúdo).
 
 Desmonte a transcrição fornecida exatamente sob esta estrutura rígida:
 
@@ -90,26 +89,26 @@ Crie a linha de montagem exata deste vídeo para que eu possa apenas preencher o
 * **Gatilho de SEO de Busca:** Quais palavras-chave fortes de nicho foram repetidas estrategicamente no texto para forçar o TikTok a indexar esse vídeo na barra de pesquisa?
 * **O Mecanismo de Loop / Compartilhamento:** Como o final foi amarrado para fazer o usuário reassistir (Loop limpo) ou salvar o vídeo imediatamente?
 
+## 🚨 4. FILTRO DE SEGURANÇA E DIRETRIZES DE MODERAÇÃO DO TIKTOK
+* **Palavras de Risco Identificadas:** Analise o texto original e liste quais termos ou expressões faladas correm o risco de disparar o filtro automático de moderação do TikTok (ex: termos violentos de jogos como "matar", "morrer", "sangue", "arma", ou jargões técnicos interpretados como nocivos como "hack", "cheat", "roubado", "dinheiro fácil", "bugar").
+* **Assuntos com Alto Risco de Suspensão:** Explique qual tipo de conteúdo ou abordagem dentro desse jogo/nicho faz a plataforma limitar o alcance ou suspender a conta (ex: ensinar glitches vantajosos em jogos online, toxicidade velada, incitação a trapaças, conteúdo que promova comportamento perigoso para menores).
+* **Dicionário de Camuflagem (O que e como falar):** Crie uma tabela de substituição de termos rápida indicando quais palavras fortes do nicho devem ser evitadas e qual termo seguro usar no lugar (ex: trocar "matar" por "eliminar/deitar", trocar "hack" por "vantagem/tática", trocar "bug" por "mecânica oculta").
+
 ---
 
 """
 
 # --- Funções Avançadas de Coleta de Dados ---
 def buscar_dados_oficiais_steam(entrada):
-    """Detecta se a entrada é um link ou texto e extrai metadados reais da Steam"""
     appid = None
-    
-    # 1. Verifica se o usuário colou um link completo da loja Steam
     if "store.steampowered.com/app/" in entrada:
         try:
-            # Extrai os números logo após a palavra '/app/'
-            match = re.search(r"/app/(\num\d+|\d+)", entrada)
+            match = re.search(r"/app/(\d+)", entrada)
             if match:
                 appid = match.group(1)
         except Exception:
             pass
             
-    # 2. Se não for link, faz a pesquisa textual padrão por ID
     if not appid:
         try:
             url_busca = "https://store.steampowered.com/api/storesearch/"
@@ -119,7 +118,6 @@ def buscar_dados_oficiais_steam(entrada):
         except Exception:
             pass
             
-    # 3. Com o ID em mãos (extraído ou buscado), puxa a ficha técnica oficial
     if appid:
         try:
             url_detalhes = "https://store.steampowered.com/api/appdetails"
@@ -181,11 +179,9 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                 
                 if nome_jogo:
                     with st.spinner(f'Decodificando dados e plataformas...'):
-                        # Processa a entrada (seja link ou nome)
                         nome_final_jogo, dados_steam = buscar_dados_oficiais_steam(nome_jogo)
                         contexto_gaming += dados_steam
                         
-                        # Varredura adicional de portais baseando-se no nome limpo do jogo
                         try:
                             with DDGS() as ddgs:
                                 query_plataformas = f"{nome_final_jogo} (site:playvalorant.com OR site:ubisoft.com OR site:epicgames.com OR site:leagueoflegends.com OR site:fortnite.com) patch notes atualizacao meta balanceamento"
@@ -199,7 +195,7 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                         except Exception:
                             pass
 
-                with st.spinner('Montando roteiros com telemetria gamer integrada...'):
+                with st.spinner('Montando roteiros com telemetria gamer e filtro anti-ban...'):
                     if nome_jogo:
                         instrucao_jogo = f"""
 ## 🛠️ CLONES ROTEIRIZADOS ULTRA-ESPECÍFICOS: {nome_final_jogo.upper()}
@@ -208,26 +204,26 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
 
 Sua missão agora é aplicar o esqueleto (Blueprint) extraído do vídeo de exemplo e gerar 3 scripts prontos para gravar adaptados inteiramente ao jogo **{nome_final_jogo}**.
 
-**REGRAS RÍGIDAS DE CLONAGEM:**
-1. É PROIBIDO o uso de placeholders vazios ou termos genéricos (como "[insira sua arma]", "[seu item]"). Os scripts devem vir com os nomes reais de armas, mapas, personagens, bugs conhecidos, táticas ou gírias nativas do jogo {nome_final_jogo}.
-2. SE o bloco de dados adicionais acima estiver vazio ou incompleto, RECORRA 100% À SUA VASTA BASE DE CONHECIMENTO INTERNA sobre o jogo {nome_final_jogo}. Você conhece perfeitamente a comunidade gamer desse jogo. Escolha itens marcantes, patches polêmicos ou dores reais dos players e aplique diretamente nos roteiros.
-3. O texto final deve ser fluido, brutal na retenção e parecer escrito por um jogador experiente que joga esse game todo dia.
+**REGRAS RÍGIDAS DE CLONAGEM (SEGURANÇA EXTREMA DE CONTEÚDO):**
+1. É PROIBIDO o uso de placeholders vazios. Os scripts devem vir com os nomes reais de armas, mapas, personagens ou táticas do jogo {nome_final_jogo}.
+2. REGRA DE COMPATIBILIDADE DE AUDIO: Os roteiros finais gerados NÃO PODEM conter palavras sensíveis identificadas na seção 4. Aplique o Dicionário de Camuflagem diretamente no texto falado. Em vez de usar palavras como "matar", "roubado" ou "hack", use substitutos limpos aprovados ("limpar a área", "imbatível", "estratégia avançada"). O texto gravado precisa passar liso pela moderação automática de áudio do TikTok.
+3. SE o bloco de dados adicionais acima estiver vazio, RECORRA 100% À SUA VASTA BASE DE CONHECIMENTO INTERNA sobre o jogo {nome_final_jogo}.
 
 Gere os 3 scripts seguindo estritamente esta estrutura:
 
 ### 🎮 Script 1 (Foco em Curiosidade / Meta Atual do Jogo)
-* **Elementos Reais Injetados:** [Liste quais nomes oficiais de armas/personagens/estratégias você embutiu neste script]
-* **Roteiro Pronto para Gravar:** 
+* **Elementos Reais Injetados:** [Quais dados oficiais seguros foram aplicados]
+* **Roteiro Pronto (Seguro para Algoritmo):** 
 "..."
 
-### 🎮 Script 2 (Foco em Dor / Erro Crítico que faz a comunidade perder ou passar raiva)
-* **Elementos Reais Injetados:** [Liste as mecânicas frustrantes, erros de novatos ou reclamações reais do jogo que você embutiu]
-* **Roteiro Pronto para Gravar:** 
+### 🎮 Script 2 (Foco em Dor / Erro Crítico que faz a comunidade perder)
+* **Elementos Reais Injetados:** [Quais frustrações reais de jogabilidade limpa foram aplicadas]
+* **Roteiro Pronto (Seguro para Algoritmo):** 
 "..."
 
 ### 🎮 Script 3 (Foco em Tática Secreta / Recompensa Rápida / Build)
-* **Elementos Reais Injetados:** [Liste qual combo, posição de mapa, glitch aceito ou build específica você embutiu]
-* **Roteiro Pronto para Gravar:** 
+* **Elementos Reais Injetados:** [Qual combinação de mecânicas legítimas do meta foi usada]
+* **Roteiro Pronto (Seguro para Algoritmo):** 
 "..."
 """
                     else:
@@ -247,7 +243,7 @@ Crie 3 variações de scripts curtos clonando a exata estrutura mecânica do exe
                 
                 # --- Organização em Abas ---
                 st.markdown("### 📊 Engenharia Reversa")
-                aba_analise, aba_texto = st.tabs(["⚡ Fórmula Rígida", "🗣️ Texto de Origem"])
+                aba_analise, aba_texto = st.tabs(["⚡ Fórmula Rígida e Segurança", "🗣️ Texto de Origem"])
                 
                 with aba_analise:
                     st.markdown(resposta)
