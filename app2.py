@@ -2,6 +2,7 @@ import streamlit as st
 from groq import Groq
 import yt_dlp
 import os
+import requests  # Para conectar com a API da Steam
 from duckduckgo_search import DDGS
 
 # --- 1. Configuração da Página e Tema Escuro Premium ---
@@ -11,7 +12,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# Injeção de CSS para customizar as cores, botões e fontes
 st.markdown("""
     <style>
     .stApp {
@@ -52,7 +52,7 @@ st.markdown("""
 
 # --- 2. Cabeçalho Principal ---
 st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-family: system-ui;'>⚡ Hook<span style='color: #7C3AED;'>Lab</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Mapeamento Estrutural Rígido com Rastreamento de Meta em Tempo Real.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Mapeamento Estrutural Rígido // Engine de Dados Multi-Plataforma.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # --- 3. Área de Credenciais e Inputs ---
@@ -63,9 +63,9 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-nome_jogo = st.text_input("Para qual JOGO você quer clonar essa estrutura?", placeholder="Ex: Minecraft, Valorant, Elden Ring, Warzone...")
+nome_jogo = st.text_input("Para qual JOGO você quer clonar essa estrutura?", placeholder="Ex: Valorant, Elden Ring, Rainbow Six, Fortnite...")
 
-# --- 4. O PROMPT BRUTO E RÍGIDO (Foco Algoritmo) ---
+# --- PROMPT BRUTO E RÍGIDO ---
 prompt_analise = """
 Você é um Diretor de Retenção Algorítmica e Analista de Dados sênior especializado no ecossistema do TikTok e nicho de Gaming.
 Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios ou textos subjetivos. Foque na mecânica fria que dita o gráfico de retenção e as métricas atuais que valorizam tempo de tela e compartilhamento.
@@ -78,7 +78,7 @@ Desmonte a transcrição fornecida exatamente sob esta estrutura rígida:
 * **Densidade de Palavras:** O ritmo foi acelerado ou teve pausas calculadas?
 
 ## 📐 2. O ESQUELETO DA COPY (Blueprint Abstrato)
-Transforme o roteiro do vídeo inteiro em uma fórmula reutilizável substituindo os elementos específicos por tags genéricas entre colchetes. 
+Transforme o roteiro do vídeo inteiro em uma fórmula reutilizável substituindo os elements específicos por tags genéricas entre colchetes. 
 *Exemplo de formato esperado:* `[GANCHO: Afirmação Chocante] + [PROVOCAÇÃO: Você está fazendo errado] + [PROVA: Olha o que acontece] + [ENTREGA: Passo 1, Passo 2] + [CTA de Loop]`.
 Crie a linha de montagem exata deste vídeo para que eu possa apenas preencher os espaços em branco.
 
@@ -90,6 +90,25 @@ Crie a linha de montagem exata deste vídeo para que eu possa apenas preencher o
 ---
 
 """
+
+# --- Funções de Coleta de Dados ---
+def buscar_dados_oficiais_steam(jogo):
+    """Consulta a API oficial da Steam Store para extrair metadados reais do jogo"""
+    try:
+        url_busca = f"https://store.steampowered.com/api/storesearch/?term={jogo}&l=brazilian"
+        res_busca = requests.get(url_busca, timeout=5).json()
+        if res_busca.get("items"):
+            appid = res_busca["items"][0]["id"]
+            url_detalhes = f"https://store.steampowered.com/api/appdetails?appids={appid}&l=brazilian"
+            res_detalhes = requests.get(url_detalhes, timeout=5).json()
+            if res_detalhes.get(str(appid), {}).get("success"):
+                dados = res_detalhes[str(appid)]["data"]
+                descricao = dados.get("short_description", "")
+                generos = ", ".join([g["description"] for g in dados.get("genres", [])])
+                return f"- [DATABASE STEAM] Descrição Oficial: {descricao} | Categorias/Gêneros: {generos}\n"
+    except Exception:
+        pass
+    return ""
 
 def baixar_video(url):
     opcoes_ytdlp = {
@@ -130,44 +149,50 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                             language="pt"
                         )
                 
-                # --- Busca na Internet pelas informações reais do Jogo ---
-                contexto_jogo = ""
+                # --- BIG DATA GAMING: Agregação de Dados das Plataformas ---
+                contexto_gaming = ""
                 if nome_jogo:
-                    with st.spinner(f'Rastreando a internet por dados e metas atuais de {nome_jogo}...'):
+                    with st.spinner(f'Conectando com as redes da Steam, Riot, Epic e Ubisoft...'):
+                        # 1. Puxa dados estruturados se o jogo estiver na Steam
+                        contexto_gaming += buscar_dados_oficiais_steam(nome_jogo)
+                        
+                        # 2. Faz uma varredura cirúrgica nos portais oficiais de Patch Notes (Riot, Epic, Ubisoft)
                         try:
                             with DDGS() as ddgs:
-                                busca = list(ddgs.text(f"{nome_jogo} game dicas meta atual mecanicas itens patches", max_results=4))
-                                contexto_jogo = "\n".join([f"- {res['body']}" for res in busca])
+                                query_plataformas = f"{nome_jogo} (site:playvalorant.com OR site:ubisoft.com OR site:epicgames.com OR site:leagueoflegends.com OR site:fortnite.com) patch notes atualizacao meta balanceamento"
+                                busca_portais = list(ddgs.text(query_plataformas, max_results=3))
+                                for res in busca_portais:
+                                    contexto_gaming += f"- [LAUNCHER PORTAL DATA] {res['body']}\n"
                         except Exception:
-                            contexto_jogo = "Não foi possível coletar dados ao vivo da internet. Use sua base de conhecimento atualizada."
+                            pass
 
-                with st.spinner('Quebrando roteiro e injetando dados do meta...'):
+                with st.spinner('Injetando telemetria de jogo na fórmula algorítmica...'):
                     if nome_jogo:
                         instrucao_jogo = f"""
 ## 🛠️ CLONES ROTEIRIZADOS ULTRA-ESPECÍFICOS: {nome_jogo.upper()}
-**Dados de Contexto e Meta atuais coletados:**
-{contexto_jogo}
+**DADOS AGREGADOS DIRETAMENTE DOS BANCOS DA STEAM / RIOT / EPIC / UBISOFT:**
+{contexto_gaming}
 
 Sua missão agora é pegar o esqueleto (Blueprint) abstrato extraído do vídeo de exemplo e preencher as lacunas gerando 3 scripts prontos para gravar aplicados inteiramente ao jogo **{nome_jogo}**.
 
 **REGRAS RÍGIDAS DE GERAÇÃO:**
-1. É PROIBIDO usar termos genéricos ou colchetes vazios nos roteiros finais (ex: Não use "[insira seu item aqui]"). Você deve escolher itens reais, armas reais, mapas reais, nerfs/buffs ou gírias reais da comunidade desse jogo e inseri-los diretamente no texto falado.
+1. É PROIBIDO usar termos genéricos ou colchetes vazios nos roteiros finais (ex: Não use "[insira seu item aqui]"). Baseando-se estritamente nos dados extraídos acima da Steam/Riot/Epic/Ubisoft, você deve escolher itens reais, armas reais, agentes/campeões reais, mapas reais, alterações de patches recentes ou gírias reais da comunidade competitiva desse jogo e inseri-los diretamente no texto falado.
 2. O texto deve soar 100% natural para um jogador nativo e experiente desse jogo.
 
 Gere os 3 scripts seguindo estritamente esta estrutura:
 
 ### 🎮 Script 1 (Foco em Curiosidade / Meta Atual do Jogo)
-* **Elementos Reais Injetados:** [Liste quais nomes de itens/armas/personagens e patches você embutiu neste script]
+* **Elementos Reais Injetados:** [Liste quais dados de patches, armas ou itens oficiais coletados você embutiu neste script]
 * **Roteiro Pronto para Gravar:** 
 "..."
 
 ### 🎮 Script 2 (Foco em Dor / Erro Crítico que faz a comunidade perder ou passar raiva)
-* **Elementos Reais Injetados:** [Liste quais mecânicas frustrantes, erros de novatos ou problemas reais do jogo você embutiu]
+* **Elementos Reais Injetados:** [Liste quais mecânicas frustrantes, erros de mecânica ou problemas reais de gameplay você embutiu]
 * **Roteiro Pronto para Gravar:** 
 "..."
 
 ### 🎮 Script 3 (Foco em Tática Secreta / Recompensa Rápida / Build)
-* **Elementos Reais Injetados:** [Liste qual combo, spot de mapa, glitch aceito ou build específica você embutiu]
+* **Elementos Reais Injetados:** [Liste qual combo, spot de mapa, tática de pro-player ou build específica você embutiu]
 * **Roteiro Pronto para Gravar:** 
 "..."
 """
