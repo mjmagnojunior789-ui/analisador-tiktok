@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 import yt_dlp
 import os
-from duckduckgo_search import DDGS  # Sistema de busca integrado e gratuito
+from duckduckgo_search import DDGS
 
 # --- 1. Configuração da Página e Tema Escuro Premium ---
 st.set_page_config(
@@ -63,11 +63,11 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-nome_jogo = st.text_input("Para qual JOGO você quer clonar essa estrutura?", placeholder="Ex: Minecraft, Valorant, GTA V...")
+nome_jogo = st.text_input("Para qual JOGO você quer clonar essa estrutura?", placeholder="Ex: Minecraft, Valorant, Elden Ring, Warzone...")
 
 # --- 4. O PROMPT BRUTO E RÍGIDO (Foco Algoritmo) ---
 prompt_analise = """
-Você é um Diretor de Retenção Algorítmica e Analista de Dados sênior especializado no ecossistema do TikTok.
+Você é um Diretor de Retenção Algorítmica e Analista de Dados sênior especializado no ecossistema do TikTok e nicho de Gaming.
 Sua análise deve ser BRUTA, DIRETA e Puramente ESTRUTURAL. Ignore elogios ou textos subjetivos. Foque na mecânica fria que dita o gráfico de retenção e as métricas atuais que valorizam tempo de tela e compartilhamento.
 
 Desmonte a transcrição fornecida exatamente sob esta estrutura rígida:
@@ -130,14 +130,13 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                             language="pt"
                         )
                 
-                # --- NOVO RECURSO: Busca na Internet pelas informações reais do Jogo ---
+                # --- Busca na Internet pelas informações reais do Jogo ---
                 contexto_jogo = ""
                 if nome_jogo:
                     with st.spinner(f'Rastreando a internet por dados e metas atuais de {nome_jogo}...'):
                         try:
                             with DDGS() as ddgs:
-                                # Faz uma varredura buscando guias, atualizações e mecânicas do jogo digitado
-                                busca = list(ddgs.text(f"{nome_jogo} game dicas meta atual mecanicas", max_results=3))
+                                busca = list(ddgs.text(f"{nome_jogo} game dicas meta atual mecanicas itens patches", max_results=4))
                                 contexto_jogo = "\n".join([f"- {res['body']}" for res in busca])
                         except Exception:
                             contexto_jogo = "Não foi possível coletar dados ao vivo da internet. Use sua base de conhecimento atualizada."
@@ -145,16 +144,32 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                 with st.spinner('Quebrando roteiro e injetando dados do meta...'):
                     if nome_jogo:
                         instrucao_jogo = f"""
-## 🛠️ CLONES ROTEIRIZADOS PARA O JOGO: {nome_jogo.upper()}
-**Informações Reais do Jogo coletadas ao vivo da Internet:**
+## 🛠️ CLONES ROTEIRIZADOS ULTRA-ESPECÍFICOS: {nome_jogo.upper()}
+**Dados de Contexto e Meta atuais coletados:**
 {contexto_jogo}
 
-Sua missão agora é pegar o esqueleto (Blueprint) abstrato extraído do vídeo de exemplo e preencher as lacunas gerando 3 scripts prontos para gravar aplicados ao jogo **{nome_jogo}**. 
-Use OBRIGATORIAMENTE os dados coletados acima: cite armas do meta atual, bugs reais conhecidos, mecânicas reais, frustrações verdadeiras dos jogadores ou termos técnicos corretos desse jogo. Os roteiros precisam parecer escritos por um jogador profissional.
+Sua missão agora é pegar o esqueleto (Blueprint) abstrato extraído do vídeo de exemplo e preencher as lacunas gerando 3 scripts prontos para gravar aplicados inteiramente ao jogo **{nome_jogo}**.
 
-* **Script 1 (Foco em Curiosidade/Descoberta/Meta)**
-* **Script 2 (Foco em Dor/Erro Comum que faz o player perder)**
-* **Script 3 (Foco em Tática Secreta/Recompensa Rápida)**
+**REGRAS RÍGIDAS DE GERAÇÃO:**
+1. É PROIBIDO usar termos genéricos ou colchetes vazios nos roteiros finais (ex: Não use "[insira seu item aqui]"). Você deve escolher itens reais, armas reais, mapas reais, nerfs/buffs ou gírias reais da comunidade desse jogo e inseri-los diretamente no texto falado.
+2. O texto deve soar 100% natural para um jogador nativo e experiente desse jogo.
+
+Gere os 3 scripts seguindo estritamente esta estrutura:
+
+### 🎮 Script 1 (Foco em Curiosidade / Meta Atual do Jogo)
+* **Elementos Reais Injetados:** [Liste quais nomes de itens/armas/personagens e patches você embutiu neste script]
+* **Roteiro Pronto para Gravar:** 
+"..."
+
+### 🎮 Script 2 (Foco em Dor / Erro Crítico que faz a comunidade perder ou passar raiva)
+* **Elementos Reais Injetados:** [Liste quais mecânicas frustrantes, erros de novatos ou problemas reais do jogo você embutiu]
+* **Roteiro Pronto para Gravar:** 
+"..."
+
+### 🎮 Script 3 (Foco em Tática Secreta / Recompensa Rápida / Build)
+* **Elementos Reais Injetados:** [Liste qual combo, spot de mapa, glitch aceito ou build específica você embutiu]
+* **Roteiro Pronto para Gravar:** 
+"..."
 """
                     else:
                         instrucao_jogo = """
