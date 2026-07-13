@@ -3,6 +3,7 @@ from groq import Groq
 import yt_dlp
 import os
 import requests
+import re  # Biblioteca para detectar o padrão do link da Steam
 from duckduckgo_search import DDGS
 
 # --- 1. Configuração da Página e Tema Escuro Premium ---
@@ -64,7 +65,8 @@ else:
 
 url_tiktok = st.text_input("Link do vídeo do TikTok:", placeholder="https://www.tiktok.com/@username/video/...")
 
-nome_jogo = st.text_input("Para qual JOGO você quer clonar essa estrutura?", placeholder="Ex: Valorant, Elden Ring, Minecraft, Fortnite...")
+# Input Atualizado para aceitar Nome ou Link da Steam
+nome_jogo = st.text_input("Para qual JOGO ou LINK DA STEAM você quer clonar essa estrutura?", placeholder="Ex: Elden Ring OU https://store.steampowered.com/app/1245620/...")
 
 # --- 4. PROMPT BRUTO E RÍGIDO (Foco Algoritmo) ---
 prompt_analise = """
@@ -92,23 +94,47 @@ Crie a linha de montagem exata deste vídeo para que eu possa apenas preencher o
 
 """
 
-# --- Funções de Coleta de Dados ---
-def buscar_dados_oficiais_steam(jogo):
-    try:
-        url_busca = "https://store.steampowered.com/api/storesearch/"
-        res_busca = requests.get(url_busca, params={"term": jogo, "l": "brazilian"}, timeout=5).json()
-        if res_busca.get("items"):
-            appid = res_busca["items"][0]["id"]
+# --- Funções Avançadas de Coleta de Dados ---
+def buscar_dados_oficiais_steam(entrada):
+    """Detecta se a entrada é um link ou texto e extrai metadados reais da Steam"""
+    appid = None
+    
+    # 1. Verifica se o usuário colou um link completo da loja Steam
+    if "store.steampowered.com/app/" in entrada:
+        try:
+            # Extrai os números logo após a palavra '/app/'
+            match = re.search(r"/app/(\num\d+|\d+)", entrada)
+            if match:
+                appid = match.group(1)
+        except Exception:
+            pass
+            
+    # 2. Se não for link, faz a pesquisa textual padrão por ID
+    if not appid:
+        try:
+            url_busca = "https://store.steampowered.com/api/storesearch/"
+            res_busca = requests.get(url_busca, params={"term": entrada, "l": "brazilian"}, timeout=5).json()
+            if res_busca.get("items"):
+                appid = res_busca["items"][0]["id"]
+        except Exception:
+            pass
+            
+    # 3. Com o ID em mãos (extraído ou buscado), puxa a ficha técnica oficial
+    if appid:
+        try:
             url_detalhes = "https://store.steampowered.com/api/appdetails"
             res_detalhes = requests.get(url_detalhes, params={"appids": appid, "l": "brazilian"}, timeout=5).json()
             if res_detalhes.get(str(appid), {}).get("success"):
                 dados = res_detalhes[str(appid)]["data"]
+                nome_real = dados.get("name", entrada)
                 descricao = dados.get("short_description", "")
                 generos = ", ".join([g["description"] for g in dados.get("genres", [])])
-                return f"- [DATABASE STEAM] Descrição Oficial: {descricao} | Categorias: {generos}\n"
-    except Exception:
-        pass
-    return ""
+                texto_retorno = f"- [DATABASE STEAM OFICIAL] Nome Identificado: {nome_real} | Descrição Técnica: {descricao} | Categorias: {generos}\n"
+                return nome_real, texto_retorno
+        except Exception:
+            pass
+            
+    return entrada, ""
 
 def baixar_video(url):
     opcoes_ytdlp = {
@@ -151,17 +177,20 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                 
                 # --- Coleta Híbrida de Informações do Jogo ---
                 contexto_gaming = ""
+                nome_final_jogo = nome_jogo
+                
                 if nome_jogo:
-                    with st.spinner(f'Varrendo redes da Steam, Riot, Epic e Ubisoft...'):
-                        contexto_gaming += buscar_dados_oficiais_steam(nome_jogo)
+                    with st.spinner(f'Decodificando dados e plataformas...'):
+                        # Processa a entrada (seja link ou nome)
+                        nome_final_jogo, dados_steam = buscar_dados_oficiais_steam(nome_jogo)
+                        contexto_gaming += dados_steam
                         
+                        # Varredura adicional de portais baseando-se no nome limpo do jogo
                         try:
                             with DDGS() as ddgs:
-                                query_plataformas = f"{nome_jogo} (site:playvalorant.com OR site:ubisoft.com OR site:epicgames.com OR site:leagueoflegends.com OR site:fortnite.com) patch notes atualizacao meta balanceamento"
-                                # Compatibilidade universal com atualizações da biblioteca DuckDuckGo
+                                query_plataformas = f"{nome_final_jogo} (site:playvalorant.com OR site:ubisoft.com OR site:epicgames.com OR site:leagueoflegends.com OR site:fortnite.com) patch notes atualizacao meta balanceamento"
                                 try:
                                     busca_portais = list(ddgs.text(keywords=query_plataformas, max_results=3))
-                                # Fallback se a versão instalada pedir sintaxe antiga
                                 except TypeError:
                                     busca_portais = list(ddgs.text(query_plataformas, max_results=3))
                                     
@@ -173,15 +202,15 @@ if st.button("Destrinchar Estrutura Algorítmica 🚀"):
                 with st.spinner('Montando roteiros com telemetria gamer integrada...'):
                     if nome_jogo:
                         instrucao_jogo = f"""
-## 🛠️ CLONES ROTEIRIZADOS ULTRA-ESPECÍFICOS: {nome_jogo.upper()}
-**Dados adicionais encontrados na web:**
+## 🛠️ CLONES ROTEIRIZADOS ULTRA-ESPECÍFICOS: {nome_final_jogo.upper()}
+**Dados adicionais encontrados para contextualização:**
 {contexto_gaming if contexto_gaming else "(Nenhum dado externo encontrado. Recorra estritamente ao seu conhecimento integrado.)"}
 
-Sua missão agora é aplicar o esqueleto (Blueprint) extraído do vídeo de exemplo e gerar 3 scripts prontos para gravar adaptados inteiramente ao jogo **{nome_jogo}**.
+Sua missão agora é aplicar o esqueleto (Blueprint) extraído do vídeo de exemplo e gerar 3 scripts prontos para gravar adaptados inteiramente ao jogo **{nome_final_jogo}**.
 
 **REGRAS RÍGIDAS DE CLONAGEM:**
-1. É PROIBIDO o uso de placeholders vazios ou termos genéricos (como "[insira sua arma]", "[seu item]"). Os scripts devem vir com os nomes reais de armas, mapas, personagens, bugs conhecidos, táticas ou gírias nativas do jogo {nome_jogo}.
-2. SE o bloco de dados adicionais acima estiver vazio ou incompleto, RECORRA 100% À SUA VASTA BASE DE CONHECIMENTO INTERNA sobre o jogo {nome_jogo}. Você conhece perfeitamente a comunidade gamer desse jogo. Escolha itens marcantes, patches polêmicos ou dores reais dos players e aplique diretamente nos roteiros.
+1. É PROIBIDO o uso de placeholders vazios ou termos genéricos (como "[insira sua arma]", "[seu item]"). Os scripts devem vir com os nomes reais de armas, mapas, personagens, bugs conhecidos, táticas ou gírias nativas do jogo {nome_final_jogo}.
+2. SE o bloco de dados adicionais acima estiver vazio ou incompleto, RECORRA 100% À SUA VASTA BASE DE CONHECIMENTO INTERNA sobre o jogo {nome_final_jogo}. Você conhece perfeitamente a comunidade gamer desse jogo. Escolha itens marcantes, patches polêmicos ou dores reais dos players e aplique diretamente nos roteiros.
 3. O texto final deve ser fluido, brutal na retenção e parecer escrito por um jogador experiente que joga esse game todo dia.
 
 Gere os 3 scripts seguindo estritamente esta estrutura:
