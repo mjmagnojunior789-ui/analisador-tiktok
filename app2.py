@@ -69,7 +69,7 @@ col1, col2 = st.columns(2)
 with col1:
     arroba_criador = st.text_input("Criador (@arroba ou Nome do Perfil):", placeholder="Ex: @alanzoka, @tavares")
 with col2:
-    nome_jogo = st.text_input("Jogo alvo ou Link da Steam:", placeholder="Ex: Valorant, Elden Ring...")
+    nome_jogo = st.text_input("Jogo alvo ou Link da Steam:", placeholder="Ex: Valorant, Elden Ring, Warzone...")
 
 # --- 4. O PROMPT DE AUDITORIA ULTRA-RÍGIDO (Foco Algoritmo Avançado) ---
 prompt_analise = """
@@ -189,7 +189,7 @@ if st.button("Executar Engenharia Reversa & Auditoria 🚀"):
                 
                 # Rastreamento de dados do Criador
                 if arroba_criador:
-                    with st.spinner(f'Escaneando pegada digital de {arroba_criador} no ecossistema TikTok...'):
+                    with st.spinner(f'Escaneando pegada digital de {arroba_criador}...'):
                         try:
                             with DDGS() as ddgs:
                                 query_perfil = f"{arroba_criador} site:tiktok.com estilo de video conteudo posts views"
@@ -223,36 +223,36 @@ if st.button("Executar Engenharia Reversa & Auditoria 🚀"):
                             pass
 
                 with st.spinner('Processando matriz de roteirização avançada...'):
-                    # VARIÁVEL CORRIGIDA (SEM ACENTOS)
+                    # COMANDO ULTRA BLINDADO PARA EVITAR CONTEÚDO REPETIDO DO VÍDEO BASE
                     instrucao_final = f"""
 ## 🎯 6. MATRIZ DE ROTEIRIZAÇÃO VARIADA (Fórmula Clonal Adaptada)
+**REGRA CRÍTICA E ABSOLUTA DE CLONAGEM:** Descarte por completo o assunto, tema, história ou nicho do vídeo original anexado. É terminantemente PROIBIDO fazer um roteiro sobre o assunto do exemplo. Você vai ignorar o tema original e clonar EXATAMENTE E APENAS a fôrma, a cadência, a ordem das tags e a engenharia de retenção que extraiu na Etapa 2 (Blueprint).
+
+O assunto real e exclusivo dos 3 novos roteiros abaixo deve ser 100% focado no universo do jogo **{nome_final_jogo}**, usando as gírias corretas, táticas, armas, patches e dores coletadas nas bases de dados.
+
 **Dados de Contexto do Criador:**
-{contexto_perfil if contexto_perfil else "(Nenhum histórico do criador encontrado. Use o tom de voz inferido da transcrição original.)"}
+{contexto_perfil if contexto_perfil else "(Mantenha o arquétipo e tom de voz ideal para o nicho de games.)"}
 
-**Dados de Contexto do Jogo Alvo ({nome_final_jogo.upper()}):**
-{contexto_gaming if contexto_gaming else "(Use a base integrada de dados do jogo.)"}
+**Dados de Contexto Técnico do Jogo Alvo ({nome_final_jogo.upper()}):**
+{contexto_gaming if contexto_gaming else "(Use sua base de conhecimento nativa e avançada sobre as dinâmicas reais deste jogo.)"}
 
-Aplique o esqueleto estrutural (Blueprint) extraído do vídeo e crie **3 opções de roteiros inteiramente variadas**, com abordagens e linhas editoriais completamente diferentes, aplicando gírias, armas, táticas e patches reais do jogo **{nome_final_jogo}**.
-
-**REGRAS DE GERAÇÃO DOS CANAIS DE ELITE:**
-* Proibido o uso de termos genéricos entre colchetes. Os textos devem vir prontos para ler.
-* Use termos limpos (Dicionário de Camuflagem) em todos os scripts.
-* Insira indicações de cortes visuais dinâmicos entre parênteses `(ex: Corte seco para o mapa, Zoom rápido)`.
-
-Gere os 3 scripts seguindo estritamente esta estrutura:
+Crie 3 opções de roteiros inéditos para o jogo **{nome_final_jogo}**, clonando milimetricamente a fôrma de blocos da Etapa 2, divididos por estas linhas editoriais dos canais de elite:
 
 ### 📈 Opção 1: Linha de Retenção Cinestésica (Foco em Entretenimento Rápido / Viralização de Massa)
-* *Estratégia do Gancho:* Quebra de padrão visual e áudio acelerado.
+* *Diretriz de Clonagem:* Pegue a fôrma de gancho de choque do vídeo base, mas aplique-a a uma curiosidade visual ou quebra de padrão bizarra de **{nome_final_jogo}**.
+* *Elementos Reais do Jogo Injetados:* [Liste quais nomes de itens/personagens reais deste jogo você embutiu]
 * *Roteiro Pronto para Gravar:*
 "..."
 
 ### 💎 Opção 2: Linha de Autoridade Inabalável (Foco em Alto Valor / Salvamentos e SEO de Busca)
-* *Estratégia do Gancho:* Dor urgente e promessa clara baseada em dados reais do meta do jogo.
+* *Diretriz de Clonagem:* Pegue a cadência de explicação e entrega do vídeo base, mas preencha ensinando um Meta, build ou tática secreta e infalível de **{nome_final_jogo}**.
+* *Elementos Reais do Jogo Injetados:* [Liste quais mecânicas/estratégias reais deste jogo você embutiu]
 * *Roteiro Pronto para Gravar:*
 "..."
 
 ### 📣 Opção 3: Linha de Engajamento Polarizado (Foco em Compartilhamento, Loops e Discussão nos Comentários)
-* *Estratégia do Gancho:* Opinião forte ("Hot-Take") ou comparação polêmica sobre elementos do jogo.
+* *Diretriz de Clonagem:* Pegue o modelo de provocação e encerramento em loop do vídeo base, mas aplique-o a uma polêmica, opinião forte ("hot-take") ou comparação ácida sobre elementos de **{nome_final_jogo}**.
+* *Elementos Reais do Jogo Injetados:* [Liste quais pontos polêmicos reais deste jogo você embutiu]
 * *Roteiro Pronto para Gravar:*
 "..."
 """
